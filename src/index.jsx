@@ -9,6 +9,8 @@ import Home from "src/pages/Home";
 import Settings from "src/pages/Settings";
 import TeamEditor from "src/pages/teams/TeamEditor";
 import TeamList from "src/pages/teams/TeamList";
+import PlayerList from "src/pages/teams/PlayerList";
+import PlayerEditor from "src/pages/teams/PlayerEditor";
 
 // Plumbing
 import ErrorPage from "src/error-page";
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="/teams" element={<TeamList />} />
         <Route path="/teams/:teamId/edit" element={<TeamEditor />} />
+        <Route path="/teams/:teamId/players" element={<PlayerList />} />
+        <Route path="/teams/:teamId/players/new" element={<PlayerEditor />} />
         <Route path="/teams/new" element={<TeamEditor />} />
         <Route path="/settings" element={<Settings />} />
       </Route>

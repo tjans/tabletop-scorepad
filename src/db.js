@@ -2,8 +2,9 @@ import Dexie from "dexie";
 import { v4 as uuidv4 } from "uuid";
 
 export const db = new Dexie("ScorePad");
-db.version(1).stores({
+db.version(2).stores({
   teams: "teamId",
+  players: "playerId, teamId",
 });
 db.on("populate", (transaction) => {
   // Use provided transaction to populate database with initial data

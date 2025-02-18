@@ -12,8 +12,6 @@ import ContentWrapper from "src/components/ContentWrapper";
 import { IoBaseballOutline } from "react-icons/io5";
 import { PiBaseballCapDuotone } from "react-icons/pi";
 
-
-
 // components
 import ConfirmationModal from "src/components/ConfirmationModal";
 import Card from "src/components/Card";

@@ -24,8 +24,8 @@ export default {
         const yearB = b.year.toString().toUpperCase();
 
         if (yearA == yearB) {
-            let cityA = a.city.toUpperCase();
-            let cityB = b.city.toUpperCase();
+            let cityA = a.location.toUpperCase();
+            let cityB = b.location.toUpperCase();
             return (cityA > cityB) ? 1 : (cityA < cityB) ? -1 : 0;
         }
         return yearA.localeCompare(yearB);

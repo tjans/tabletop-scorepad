@@ -8,20 +8,22 @@ import teamService from "src/services/TeamService";
 
 // foundation
 import usePageTitle from 'src/hooks/usePageTitle'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // forms
 import { useForm } from "react-hook-form";
 import { TextInput } from "src/components/TextInput";
 import FormSubmit from "src/components/FormSubmit";
 
+
 // components
 import ContentWrapper from "src/components/ContentWrapper";
+import TextIcon from "src/components/TextIcon";
 
 export default function TeamEditor() {
   usePageTitle("Edit Team");
   const navigate = useNavigate();
-
+  const { teamId } = useParams();
   const [team, setTeam] = useState(null);
 
   const [isNotAvailableModalOpen, setIsNotAvailableModalOpen] = useState(false);
@@ -34,6 +36,18 @@ export default function TeamEditor() {
     reset,
   } = useForm();
 
+  useEffect(() => {
+    load();
+  }, []);
+
+  const load = async () => {
+    if (teamId) {
+      let team = await teamService.getTeam(teamId);
+      setTeam(team)
+      reset(team);
+    }
+  }
+
   const onSubmit = (data) => {
     teamService.saveTeam({ ...data, teamId: team?.teamId });
     navigate("/teams");
@@ -43,15 +57,11 @@ export default function TeamEditor() {
     <>
       <ContentWrapper>
 
-        <div className="flex justify-center">
-          {
-            <div
-              className="flex items-center justify-center text-xl font-bold rounded-full"
-              style={{ color: '#000000', background: '#CECECE', height: '70px', width: '70px' }}>
-              {'?'}
-            </div>
-          }
-        </div>
+        {team &&
+          <TextIcon
+            text={team.abbreviation ?? '?'}
+            settings={{ color: team.color, textColor: team.textColor }} />
+        }
 
         <form onSubmit={handleSubmit(onSubmit)}>
 
