@@ -10,6 +10,7 @@ import teamService from "src/services/TeamService";
 // foundation
 import usePageTitle from 'src/hooks/usePageTitle'
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // forms
 import { useForm } from "react-hook-form";
@@ -54,6 +55,7 @@ export default function PlayerEditor() {
 
   const onSubmit = (data) => {
     playerService.savePlayer({ ...data, teamId: teamId, playerId: player?.playerId });
+    toast.success("Player saved successfully!");
     navigate(`/teams/${teamId}/players`);
   };
 

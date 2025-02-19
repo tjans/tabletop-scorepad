@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 
 // store
 import useAppStore from "src/stores/useAppStore";
@@ -12,6 +12,9 @@ import ContentWrapper from "src/components/ContentWrapper";
 import playerService from "src/services/PlayerService";
 import teamService from "src/services/TeamService";
 
+// icons
+import { MdDelete } from "react-icons/md";
+
 // forms
 import { useForm } from "react-hook-form";
 import { TextInput } from "src/components/TextInput";
@@ -21,13 +24,17 @@ import FloatingAddButton from "src/components/FloatingAddButton";
 import Card from "src/components/Card";
 import Button from "src/components/Button";
 import TextIcon from "src/components/TextIcon";
+import ConfirmationModal from "src/components/ConfirmationModal";
 
 export default function PlayerList() {
   usePageTitle("Team Roster");
+  const navigate = useNavigate();
   const { teamId } = useParams();
   const appStore = useAppStore()
   const [players, setPlayers] = useState([]);
+  const [isDeletePlayerConfirmationOpen, setIsDeletePlayerConfirmationOpen] = useState(false);
   const [team, setTeam] = useState(null);
+  const [deletePlayerId, setDeletePlayerId] = useState(null);
 
   useEffect(() => {
     load();
@@ -41,6 +48,17 @@ export default function PlayerList() {
     setTeam(team);
   }
 
+  const handleDelete = async (playerId) => {
+    setDeletePlayerId(null);
+    await playerService.deletePlayer(deletePlayerId);
+    setIsDeletePlayerConfirmationOpen(false);
+    await load();
+  }
+
+  const handleEdit = (player) => {
+    navigate(`/teams/${teamId}/players/${player.playerId}/edit`);
+  }
+
   return (
     <>
       <ContentWrapper noPadding={true}>
@@ -52,12 +70,21 @@ export default function PlayerList() {
         {players.length > 0 ? (
           <div className="mt-4 border-t border-b border-gray-200">
             {players.map((player, index) => (
-              <div key={player.playerId} className="flex items-center justify-between px-4 py-2 border-b border-gray-200 last:border-b-0">
-                <div>
-                  {player.firstName} {player.lastName}
+              <div key={player.playerId} className="flex items-center justify-between px-4 py-2 border-b border-gray-200 cursor-pointer last:border-b-0">
+                <div onClick={_ => handleEdit(player)}>
+                  {player.position} - {player.firstName} {player.lastName} ({player.hand})
                 </div>
+
                 <div>
-                  {player.position}
+                  <button
+                    onClick={() => {
+                      setDeletePlayerId(player.playerId);
+                      setIsDeletePlayerConfirmationOpen(true);
+                    }}
+                    className="text-2xl text-red-500"
+                  >
+                    <MdDelete />
+                  </button>
                 </div>
               </div>
             ))}
@@ -71,6 +98,13 @@ export default function PlayerList() {
         <Button to={`/teams`} className="inline-block mt-3" text="&laquo; Back to teams" />
 
       </ContentWrapper>
+
+      <ConfirmationModal
+        isModalOpen={isDeletePlayerConfirmationOpen}
+        onReject={_ => setIsDeletePlayerConfirmationOpen(false)}
+        onConfirm={_ => handleDelete()}
+        title="Delete player?"
+        message="Are you sure you want to delete this player?" />
     </>
   );
 }

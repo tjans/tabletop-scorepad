@@ -9,12 +9,12 @@ import teamService from "src/services/TeamService";
 // foundation
 import usePageTitle from 'src/hooks/usePageTitle'
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // forms
 import { useForm } from "react-hook-form";
 import { TextInput } from "src/components/TextInput";
 import FormSubmit from "src/components/FormSubmit";
-
 
 // components
 import ContentWrapper from "src/components/ContentWrapper";
@@ -50,6 +50,7 @@ export default function TeamEditor() {
 
   const onSubmit = (data) => {
     teamService.saveTeam({ ...data, teamId: team?.teamId });
+    toast.success("Team saved successfully!");
     navigate("/teams");
   };
 

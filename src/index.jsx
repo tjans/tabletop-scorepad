@@ -32,6 +32,7 @@ const router = createBrowserRouter(
         <Route path="/teams/:teamId/edit" element={<TeamEditor />} />
         <Route path="/teams/:teamId/players" element={<PlayerList />} />
         <Route path="/teams/:teamId/players/new" element={<PlayerEditor />} />
+        <Route path="/teams/:teamId/players/:playerId/edit" element={<PlayerEditor />} />
         <Route path="/teams/new" element={<TeamEditor />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
