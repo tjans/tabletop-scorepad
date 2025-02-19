@@ -18,7 +18,7 @@ function formSubmit(props) {
           <button
             onClick={_ => props.onSubmit ? props.onSubmit() : null}
             className="px-4 py-2 font-bold text-white bg-btn-primary border-b-4 border-b-[#3b6994] rounded hover:bg-defaultBlue-700 w-max">
-            Submit
+            {props.text ?? "Submit"}
           </button>
         }
 

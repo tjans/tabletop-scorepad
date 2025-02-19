@@ -53,10 +53,14 @@ export default function PlayerEditor() {
     }
   }
 
-  const onSubmit = (data) => {
-    playerService.savePlayer({ ...data, teamId: teamId, playerId: player?.playerId });
-    toast.success("Player saved successfully!");
-    navigate(`/teams/${teamId}/players`);
+  const onSubmit = async (data) => {
+    try {
+      await playerService.savePlayer({ ...data, teamId: teamId, playerId: player?.playerId });
+      toast.success("Player saved successfully!");
+      navigate(`/teams/${teamId}/players`);
+    } catch (error) {
+      toast.error("Failed to save player.");
+    }
   };
 
   return (

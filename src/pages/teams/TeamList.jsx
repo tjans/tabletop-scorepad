@@ -11,6 +11,8 @@ import ContentWrapper from "src/components/ContentWrapper";
 // icons
 import { FaPeopleGroup } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
+import { GrOrderedList } from "react-icons/gr";
+
 
 // forms
 import { useForm } from "react-hook-form";
@@ -66,6 +68,11 @@ export default function TeamList() {
                   <FaPeopleGroup />
                 </button>
 
+                <button onClick={() => navigate(`/teams/${team.teamId}/lineups`)}
+                  className="text-2xl text-black">
+                  <GrOrderedList />
+                </button>
+
                 <button
                   onClick={() => handleDelete(team.id)}
                   className="text-2xl text-red-500"
@@ -76,6 +83,7 @@ export default function TeamList() {
             </div>
           </Card>
         )) : <div>No teams found, add your first one!</div>}
+
 
       </ContentWrapper>
     </>
