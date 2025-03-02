@@ -94,7 +94,7 @@ export default function LineupEditor() {
                 <div key={index} className="flex items-center px-4 py-2 border-b border-gray-200 cursor-pointer justify-content-center last:border-b-0">
                   <div>
                     <span className="font-bold">{index + 1}.&nbsp;&nbsp;&nbsp;</span>
-                    <span className=""><a href="#">LF - Player Name (R)</a></span>
+                    <span className=""><a href="#" onClick={_ => alert('player')}>LF - Player Name (R)</a></span>
                   </div>
                 </div>
               ))}
