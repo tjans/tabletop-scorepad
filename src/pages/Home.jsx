@@ -48,15 +48,15 @@ export default function Home() {
 
 
 
-          <Card to="/teams" className="text-" >
+          <Card to="/leagues/0/edit" className="" >
             <div className="flex items-center gap-3">
               <PiBaseballCapDuotone className="mr-5 text-3xl text-defaultBlue" />
               <section className="text-left">
                 <div className="font-bold">
-                  Team Management
+                  Create League
                 </div>
                 <div className="text-sm">
-                  Manage teams, players, lineups
+                  Create GMs, teams, and players for a new league
                 </div>
               </section >
             </div>

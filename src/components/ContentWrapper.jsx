@@ -10,7 +10,7 @@ const ContentWrapper = (props) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
         >
-            <main className={"py-4" + (props.noPadding ? "" : " px-4")}>
+            <main className={"mt-4 pb-28" + (props.noPadding ? "" : " px-4")}>
                 {props.children}
             </main>
         </motion.h1>

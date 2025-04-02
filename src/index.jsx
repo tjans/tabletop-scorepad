@@ -8,14 +8,8 @@ import Layout from "src/pages/Layout";
 import Home from "src/pages/Home";
 import Settings from "src/pages/Settings";
 
-import TeamList from "src/pages/teams/TeamList";
-import TeamEditor from "src/pages/teams/TeamEditor";
-
-import PlayerEditor from "src/pages/teams/PlayerEditor";
-import PlayerList from "src/pages/teams/PlayerList";
-
-import LineupList from "src/pages/teams/LineupList";
-import LineupEditor from "src/pages/teams/LineupEditor";
+// Custom Page
+import LeagueEditor from "src/pages/LeagueEditor";
 
 // Plumbing
 import ErrorPage from "src/error-page";
@@ -33,19 +27,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Layout />} errorElement={<ErrorPage />}>
         <Route index element={<Home />} />
-
-        <Route path="/teams" element={<TeamList />} />
-        <Route path="/teams/new" element={<TeamEditor />} />
-        <Route path="/teams/:teamId/edit" element={<TeamEditor />} />
-
-        <Route path="/teams/:teamId/players" element={<PlayerList />} />
-        <Route path="/teams/:teamId/players/new" element={<PlayerEditor />} />
-        <Route path="/teams/:teamId/players/:playerId/edit" element={<PlayerEditor />} />
-
-        <Route path="/teams/:teamId/lineups" element={<LineupList />} />
-        <Route path="/teams/:teamId/lineups/new" element={<LineupEditor />} />
-        <Route path="/teams/:teamId/lineups/:lineupId/edit" element={<LineupEditor />} />
-
+        <Route path="/leagues/:leagueId/edit" element={<LeagueEditor />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
     </>,

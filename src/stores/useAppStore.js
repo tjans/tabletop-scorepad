@@ -6,7 +6,7 @@ const useAppStore = create(
     (set, get) => ({
 
       // state variables
-      title: "ScorePad!",
+      title: "Fast Inning Baseball",
      
       // derived functions
       someFunction: () => {
@@ -17,7 +17,7 @@ const useAppStore = create(
       setTitle: (title) => set(({ title: title })),
     }),
     {
-      name: 'ScorePad',
+      name: 'FIB',
       storage: createJSONStorage(() => localStorage)
     },
   ),

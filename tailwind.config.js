@@ -11,14 +11,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        green: '#6BC677',
-        defaultBlue: '#508DC8',
-        blueDarken: '#3d7aa9',
         transparent: 'transparent',
         midnight: '#343c4d',
         soot: '#212121',
         soft: '#757575',
         lightGray: '#CECECE',
+        
         'btn-primary': '#508DC8',
         'btn-primary-shadow': '#4070a0',
       }
