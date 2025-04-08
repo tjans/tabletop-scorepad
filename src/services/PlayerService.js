@@ -3,6 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 import util from "src/custom/utilities/util";
 
 class PlayerService {
+  static async savePlayer (player) {
+    player = { ...player, playerId: player.playerId ?? uuidv4() };
+    return await db.players.put(player);
+  }
+
   // #region All Players
   static generateAge() {
     const roll = util.rollTensOnes();
@@ -127,7 +132,7 @@ class PlayerService {
       position: position,
       age: this.generateAge(),
       archetype: arch,
-      hittingGrade,
+      grade: hittingGrade,
       powerGrade,
       defenseGrade,
       clutchGrade,

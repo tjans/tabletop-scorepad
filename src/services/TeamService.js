@@ -4,6 +4,16 @@ import util from "src/custom/utilities/util";
 import playerService from "src/services/PlayerService";
 
 class TeamService {
+  static async saveTeam(team) {
+    team = { ...team, teamId: team.teamId ?? uuidv4() };
+    return await db.teams.put(team);
+  }
+
+  static async getTeams(leagueId) {
+    const teams = await db.teams.where("leagueId").equals(leagueId).toArray();
+    return teams;
+  }
+
   static generateTeam() {
   
     let positionCounts = {
@@ -24,6 +34,7 @@ class TeamService {
 
     var powerTotal = 0;
     var hittingTotal = 0;
+    var defenseTotal = 0;
 
     // iterate over the position counts and run the generate player
     //let player = playerService.generatePositionPlayer("C");
@@ -33,24 +44,80 @@ class TeamService {
         let player = playerService.generatePositionPlayer(position);
         powerTotal += player.powerValue;
         hittingTotal += player.hittingValue;
+        defenseTotal += player.defenseValue;
+
         positionPlayers.push(player);
       }
     }
 
+    var bullPenValue = 0;
+    var bullpenCount = 0;
     let pitchers = [];
     for (let position in pitcherCounts) {
       for (let i = 0; i < pitcherCounts[position]; i++) {
         let player = playerService.generatePitcher(position);
         pitchers.push(player);
+
+        if(position == "RP") {
+          bullpenCount++;
+          bullPenValue += player.value;
+        }
       }
     }
 
+    var defenseQuality = this.getDefenseQuality(defenseTotal);
     var qualities = {
-      powerTotal: this.getPowerQuality(powerTotal),
-      hittingTotal: this.getScoringQuality(hittingTotal, powerTotal)
+      power: this.getPowerQuality(powerTotal),
+      scoring: this.getScoringQuality(hittingTotal, powerTotal),
+      defense: defenseQuality,
+      isSlick: this.isSlick(defenseQuality)
     }
 
-    return {qualities, positionPlayers, pitchers};
+    var bullpenAverage = Math.round(bullPenValue / bullpenCount);
+    
+    return {qualities, positionPlayers, pitchers, bullpenGrade: this.valueToGrade(bullpenAverage)};
+  }
+
+  static valueToGrade(value) {
+    switch(value) {
+      case 7: return "A+"; break;
+      case 6: return "A"; break;
+      case 5: return "B+"; break;
+      case 4: return "B"; break;
+      case 3: return "C"; break;
+      case 2: return "D"; break;
+      case 1: return "F"; break;
+    }
+
+    return "??";
+  }
+
+  static getDefenseQuality(points) {
+    if (points > 42) {
+      return "SOLID";
+    } else if (points >= 40 && points <= 42) {
+      return "SOLID•";
+    } else if (points >= 30 && points <= 39) {
+      return "neutral";
+    } else if (points >= 27 && points <= 29) {
+      return "POROUS•";
+    } else {
+      return "POROUS";
+    }
+  }
+
+  static isSlick(fieldingGrade) {
+    let roll = util.rollTensOnes();
+
+    if (roll >= 11 && roll <= 36) {
+      return false;
+    } else if (roll >= 41 && roll <= 44) {
+      return fieldingGrade == "POROUS" || fieldingGrade == "POROUS•";
+    } else if (roll >= 45 && roll <= 54) {
+      return fieldingGrade == "neutral";
+    } else if (roll >= 55 && roll <= 66) {
+      return fieldingGrade == "SOLID" || fieldingGrade == "SOLID•";
+    }
   }
 
   static getScoringQuality(hittingPoints, powerPoints) {

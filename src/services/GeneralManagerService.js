@@ -3,6 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 import util from "src/custom/utilities/util";
 
 class GeneralManagerService {
+    static saveGeneralManager(generalManager) {
+        generalManager = { ...generalManager, generalManagerId: generalManager.generalManagerId ?? uuidv4() };
+        return db.generalManagers.put(generalManager);
+      }
+ 
+  
     static generate() {
       return {
         riskTolerance: this.generateRiskTolerance(),
@@ -69,10 +75,11 @@ class GeneralManagerService {
     }
 
     static generateRiskTolerance() {
-      const roll = util.rollD6();
+      let roll = util.rollD6();
+      
       let returnValue = "??";
       if (roll <= 2) returnValue = this.risks.CONSERVATIVE;
-      if (roll <= 4) returnValue = this.risks.NEUTRAL;
+      else if (roll <= 4) returnValue = this.risks.NEUTRAL;
       else returnValue = this.risks.AGGRESSIVE;
 
       return this.riskToString(returnValue);
@@ -82,7 +89,7 @@ class GeneralManagerService {
       const roll = util.rollD6();
       let returnValue = "??";
       if (roll <= 2) returnValue = this.developmentFocuses.FARM_FIRST;
-      if (roll <= 4) returnValue = this.developmentFocuses.MIXED;
+      else if (roll <= 4) returnValue = this.developmentFocuses.MIXED;
       else returnValue = this.developmentFocuses.WIN_NOW;
       return this.developmentFocusToString(returnValue);
     }
@@ -91,7 +98,7 @@ class GeneralManagerService {
       const roll = util.rollD6();
       let returnValue = "??";
       if (roll <= 2) returnValue = this.teamBuildingStrategy.PITCHING_FOCUSED;
-      if (roll <= 4) returnValue = this.teamBuildingStrategy.BALANCED;
+      else if (roll <= 4) returnValue = this.teamBuildingStrategy.BALANCED;
       else returnValue = this.teamBuildingStrategy.OFFENSE_FOCUSED;
 
       return this.teamBuildingStrategyToString(returnValue);
