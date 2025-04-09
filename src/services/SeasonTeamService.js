@@ -8,6 +8,13 @@ class SeasonTeamService {
         return await db.seasonTeams.put(seasonTeam);
       }
 
+      static async getSeasonTeam(seasonTeamId) {
+        let seasonTeam = await db.seasonTeams.where("seasonTeamId")
+          .equals(seasonTeamId)
+          .first();
+        return seasonTeam;
+      }
+
       static async getSeasonTeams(seasonId) {
         let seasonTeams = await db.seasonTeams.where("seasonId")
           .equals(seasonId)

@@ -23,6 +23,7 @@ import leagueService from "src/services/LeagueService";
 import seasonTeamService from "src/services/SeasonTeamService";
 import SeasonService from "src/services/SeasonService";
 import SeasonPlayerService from "src/services/SeasonPlayerService";
+import nameService from "src/services/NameService";
 
 // components
 import DebugJson from "src/components/DebugJson";
@@ -81,8 +82,10 @@ export default function LeagueEditor() {
 
       // Create the general manager record
       let gm = await gmService.generate();
-      gm.firstName = "GM";
-      gm.lastName = `${i + 1}`;
+      let names = await nameService.generateName();
+
+      gm.firstName = names.firstName;
+      gm.lastName = names.lastName;
       let gmId = await gmService.saveGeneralManager(gm);
 
       // Add the team to the current season
@@ -96,10 +99,12 @@ export default function LeagueEditor() {
 
       // create the players and attach them to the team
       ["C", "1B", "2B", "SS", "3B", "OF", "OF", "OF", "DH"].map(async (position) => {
+
+        let names = await nameService.generateName();
         let player = {
           position: position,
-          firstName: "Player",
-          lastName: `${i + 1}`,
+          firstName: names.firstName,
+          lastName: names.lastName,
           position
         }
 
@@ -120,9 +125,11 @@ export default function LeagueEditor() {
       });
 
       for (let i = 0; i < 6; i++) {
+
+        let names = await nameService.generateName();
         let player = {
-          firstName: "Player",
-          lastName: `${i + 1}`,
+          firstName: names.firstName,
+          lastName: names.lastName,
           position: "SP"
         }
         let playerId = await playerService.savePlayer(player);
@@ -137,9 +144,10 @@ export default function LeagueEditor() {
       }
 
       for (let i = 0; i < 4; i++) {
+        let names = await nameService.generateName();
         let player = {
-          firstName: "Player",
-          lastName: `${i + 1}`,
+          firstName: names.firstName,
+          lastName: names.lastName,
           position: "RP"
         }
         let playerId = await playerService.savePlayer(player);
@@ -152,9 +160,10 @@ export default function LeagueEditor() {
         });
       }
 
+      let closerName = await nameService.generateName();
       let player = {
-        firstName: "Player",
-        lastName: `${i + 1}`,
+        firstName: closerName.firstName,
+        lastName: closerName.lastName,
         position: "CL"
       }
       let playerId = await playerService.savePlayer(player);
@@ -170,14 +179,11 @@ export default function LeagueEditor() {
     navigate(`/leagues/${leagueId}`);
   }
 
-  // let gm = gmService.generate();
-  // let pitcher = playerService.generatePitcher("CL");
-  // let player = playerService.generatePositionPlayer("C");
-  // let team = teamService.generateTeam();
-
   return (
     <>
       <ContentWrapper align="start">
+
+
 
         {!numberOfTeams &&
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -201,6 +207,18 @@ export default function LeagueEditor() {
                 required: "Number of teams is required"
               }}
             />
+
+            <TextInput
+              label="How many games will each team play?"
+              name="numberOfGames"
+              register={register}
+              error={errors.numberOfGames}
+              rules={{
+                required: "Number of games is required"
+              }}
+            />
+
+
 
             <ToggleButton
               label="Draft league?"

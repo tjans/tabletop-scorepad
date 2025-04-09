@@ -10,7 +10,8 @@ class LeagueFacade {
     const teams = await Promise.all(seasonTeams.map(async (seasonTeam) => {
       const team = await db.teams.get(seasonTeam.teamId);
       const gm = await db.generalManagers.get(seasonTeam.generalManagerId); // Assuming `gmId` is a property of the team
-      return { ...seasonTeam, parent: team, gm };
+      const seasonPlayers = await db.seasonPlayers.where("seasonTeamId").equals(seasonTeam.seasonTeamId).toArray();
+      return { ...seasonTeam, parent: team, gm, seasonPlayers };
     }));
 
     teams.sort((a, b) => {

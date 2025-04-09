@@ -9,15 +9,12 @@ import usePageTitle from 'src/hooks/usePageTitle'
 import ContentWrapper from "src/components/ContentWrapper";
 
 // services
-import gmService from "src/services/GeneralManagerService";
-import playerService from "src/services/PlayerService";
-import teamService from "src/services/TeamService";
 import leagueService from "src/services/LeagueService";
 import leagueFacade from "src/facades/LeagueFacade";
+import seasonPlayerService from "src/services/SeasonPlayerService";
 
-// components
-import DebugJson from "src/components/DebugJson";
-import { set } from "react-hook-form";
+// misc
+import { toast } from "react-toastify";
 
 export default function LeagueViewer() {
   usePageTitle("View League");
@@ -37,14 +34,30 @@ export default function LeagueViewer() {
     load();
   }, [selectedPosition])
 
-  const handleSelectTeam = (team) => {
+  const handleSelectTeam = (team) => async (e) => {
+    e.preventDefault();
     setSelectedTeam(team);
   }
 
-  const handleSelectPosition = (e, selected) => {
+  const handleSelectPosition = (selected) => async (e) => {
     e.preventDefault();
     setSelectedPosition(selected);
 
+  }
+
+  const handleDraftPlayer = (seasonPlayerId) => async (e) => {
+    e.preventDefault();
+    console.log(seasonPlayerId);
+    if (selectedTeam) {
+      const teamId = selectedTeam.teamId;
+      const seasonId = league.currentSeason.seasonId;
+
+      let seasonPlayer = await seasonPlayerService.getSeasonPlayer(seasonPlayerId);
+      seasonPlayer.seasonTeamId = selectedTeam.seasonTeamId;
+      await seasonPlayerService.saveSeasonPlayer(seasonPlayer);
+      toast.success("Player successfully drafted!")
+      load();
+    }
   }
 
   const isOffense = () => ['1B', '2B', '3B', 'SS', 'DH', 'OF', 'C'].includes(selectedPosition);
@@ -84,9 +97,9 @@ export default function LeagueViewer() {
                 <ul>
                   {teams.map(team => (
                     <li key={team.teamId}>
-                      <a href="#" onClick={_ => handleSelectTeam(team)} className={"underline" + (selectedTeam?.teamId === team.teamId ? " font-bold text-blue-500" : "")}>
-                        {team.parent.city} {team.parent.name} - {team.gm.firstName} {team.gm.lastName}
-                      </a>
+                      <a href="#" onClick={handleSelectTeam(team)} className={"underline" + (selectedTeam?.teamId === team.teamId ? " font-bold text-blue-500" : "")}>
+                        {team.parent.city} {team.parent.name}
+                      </a> - {team.gm.firstName} {team.gm.lastName} ({team.seasonPlayers.length})
                     </li>
                   ))}
                 </ul>
@@ -97,10 +110,12 @@ export default function LeagueViewer() {
             {selectedTeam &&
               <div className="mt-4">
                 <table width="">
-                  <tr><td colSpan="2"><strong>{selectedTeam.gm.firstName} {selectedTeam.gm.lastName}</strong></td></tr>
-                  <tr><td><strong>Risk:</strong></td><td className="pl-2">{selectedTeam.gm.riskTolerance}</td></tr>
-                  <tr><td><strong>Develop:</strong></td><td className="pl-2"> {selectedTeam.gm.developmentFocus}</td></tr>
-                  <tr><td><strong>Strategy: </strong></td><td className="pl-2">{selectedTeam.gm.teamBuildingStrategy}</td></tr>
+                  <tbody>
+                    <tr><td colSpan="2"><strong>{selectedTeam.gm.firstName} {selectedTeam.gm.lastName}</strong></td></tr>
+                    <tr><td><strong>Risk:</strong></td><td className="pl-2">{selectedTeam.gm.riskTolerance}</td></tr>
+                    <tr><td><strong>Develop:</strong></td><td className="pl-2"> {selectedTeam.gm.developmentFocus}</td></tr>
+                    <tr><td><strong>Strategy: </strong></td><td className="pl-2">{selectedTeam.gm.teamBuildingStrategy}</td></tr>
+                  </tbody>
                 </table>
 
                 <div className="my-5">
@@ -117,7 +132,7 @@ export default function LeagueViewer() {
             <div className="flex">
               {['Offense', 'Pitchers', 'C', '1B', '2B', '3B', 'SS', 'OF', 'DH', 'SP', 'RP', 'CL'].map((position) => {
                 return <div className={`mx-3 ${selectedPosition == position ? "font-bold" : ""}`} key={position}>
-                  <a className="underline" href="#" onClick={e => handleSelectPosition(e, position)}>
+                  <a className="underline" href="#" onClick={handleSelectPosition(position)}>
                     {position}
                   </a>
                 </div>
@@ -144,6 +159,9 @@ export default function LeagueViewer() {
                           <th className="px-4 py-2">Defense</th>
                         </>
                       }
+
+                      {selectedTeam &&
+                        <th className="px-4">Action</th>}
                     </tr>
                   </thead>
 
@@ -161,6 +179,15 @@ export default function LeagueViewer() {
                             <td className="px-4 py-2">{player.clutchGrade}</td>
                             <td className="px-4 py-2">{player.defenseGrade}</td></>
                         }
+
+                        {selectedTeam &&
+                          <td>
+                            <button onClick={handleDraftPlayer(player.seasonPlayerId)} className="px-3 py-1 text-xs font-bold text-white uppercase bg-blue-500 rounded-full hover:bg-blue-700">
+                              DRAFT
+                            </button>
+                          </td>
+                        }
+
                       </tr>
                     ))}
                   </tbody>

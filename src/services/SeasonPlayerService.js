@@ -6,6 +6,13 @@ class SeasonPlayerService {
         seasonPlayer = { ...seasonPlayer, seasonPlayerId: seasonPlayer.seasonPlayerId ?? uuidv4() };
         return await db.seasonPlayers.put(seasonPlayer);
     }
+
+    static async getSeasonPlayer(seasonPlayerId) {
+        let seasonPlayer = await db.seasonPlayers.where("seasonPlayerId")
+          .equals(seasonPlayerId)
+          .first();
+        return seasonPlayer;
+    }
 }
   
 export default SeasonPlayerService;
