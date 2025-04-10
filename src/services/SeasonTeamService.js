@@ -12,6 +12,14 @@ class SeasonTeamService {
         let seasonTeam = await db.seasonTeams.where("seasonTeamId")
           .equals(seasonTeamId)
           .first();
+
+        if (seasonTeam) {
+          let team = await db.teams.where("teamId")
+        .equals(seasonTeam.teamId)
+        .first();
+          seasonTeam.parent = team; // Attach the team details to the seasonTeam object
+        }
+
         return seasonTeam;
       }
 

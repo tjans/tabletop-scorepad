@@ -12,6 +12,8 @@ import Settings from "src/pages/Settings";
 import LeagueEditor from "src/pages/LeagueEditor";
 import LeagueViewer from "src/pages/LeagueViewer";
 import Draft from "src/pages/Draft";
+import TeamList from "src/pages/league/TeamList"
+import LeagueList from "src/pages/league/LeagueList";
 
 // Plumbing
 import ErrorPage from "src/error-page";
@@ -32,6 +34,10 @@ const router = createBrowserRouter(
         <Route path="/leagues/:leagueId/edit" element={<LeagueEditor />} />
         <Route path="/leagues/:leagueId" element={<LeagueViewer />} />
         <Route path="/leagues/:leagueId/draft" element={<Draft />} />
+
+        <Route path="/leagues" element={<LeagueList />} />
+        <Route path="/leagues/:leagueId/teams" element={<TeamList />} />
+
         <Route path="/settings" element={<Settings />} />
       </Route>
     </>,

@@ -7,6 +7,11 @@ class LeagueService {
         return await db.leagues.put(league);
       }
 
+      static async getLeagues () {
+        let leagues = await db.leagues.toArray();
+        return leagues;
+      }
+
     static async getLeague (leagueId) {
         let league = await db.leagues.get(leagueId);
 

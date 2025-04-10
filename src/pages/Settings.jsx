@@ -8,7 +8,7 @@ import FormSubmit from "src/components/FormSubmit";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Services
-import settingsService from "src/services/settingsService";
+import settingsService from "src/services/SettingsService";
 
 // unsorted
 import usePageTitle from 'src/hooks/usePageTitle'
