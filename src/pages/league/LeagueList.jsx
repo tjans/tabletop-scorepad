@@ -1,6 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 
+// icons
+import { PiBaseballCapDuotone } from "react-icons/pi";
+
+// components
+import Card from "src/components/Card";
+
 // foundation
 import usePageTitle from 'src/hooks/usePageTitle'
 import ContentWrapper from "src/components/ContentWrapper";
@@ -32,50 +38,50 @@ export default function LeagueList() {
                 </div>
 
 
-                <table className="text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-300">
 
-                        <tr>
-                            <th className="px-4 py-2 text-start">Name</th>
-                            <th className="px-4 py-2"># Teams</th>
-                            <th className="px-4 py-2"># Games</th>
-                            <th className="px-4 py-2">Type</th>
-                            <th className="px-4 py-2">Actions</th>
-                        </tr>
-                    </thead>
+                {leagues && leagues.length > 0 && leagues.map((league) => {
 
-                    <tbody>
-                        {leagues && leagues.length > 0 && leagues.map((league) => {
-
-                            return (
-
-                                <tr key={league.leagueId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    return (
+                        <Card to={`/leagues/${league.leagueId}/teams`} className="" key={league.leagueId} >
+                            <div className="flex items-center gap-3">
+                                <PiBaseballCapDuotone className="mr-5 text-3xl text-defaultBlue" />
+                                <section className="text-left">
+                                    <div className="font-bold">
                                         {league.name}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        {league.numberOfTeams}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        {league.numberOfGames}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        {league.isDraftLeague ? "Draft" : "Auto"}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        <Link to={`/leagues/${league.leagueId}/edit`} className="px-3 py-1 text-xs font-bold text-white uppercase bg-blue-500 rounded-full hover:bg-blue-700">
-                                            EDIT
-                                        </Link>
+                                    </div>
+                                    <div className="text-sm">
+                                        {league.numberOfTeams} Teams, {league.numberOfGames} Games, {league.isDraftLeague ? "Draft" : "Auto"}
+                                    </div>
+                                </section >
+                            </div>
+                        </Card>
 
-                                        <Link to={`/leagues/${league.leagueId}`} className="px-3 py-1 ml-2 text-xs font-bold text-white uppercase bg-yellow-500 rounded-full hover:bg-yellow-700">
-                                            VIEW
-                                        </Link>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                        // <tr key={league.leagueId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        //     <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        //         {league.name}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         {league.numberOfTeams}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         {league.numberOfGames}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         {league.isDraftLeague ? "Draft" : "Auto"}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         <Link to={`/leagues/${league.leagueId}/edit`} className="px-3 py-1 text-xs font-bold text-white uppercase bg-blue-500 rounded-full hover:bg-blue-700">
+                        //             EDIT
+                        //         </Link>
+
+                        //         <Link to={`/leagues/${league.leagueId}`} className="px-3 py-1 ml-2 text-xs font-bold text-white uppercase bg-yellow-500 rounded-full hover:bg-yellow-700">
+                        //             VIEW
+                        //         </Link>
+                        //     </td>
+                        // </tr>
+                    );
+                })}
+
             </ContentWrapper>
         </>
     );

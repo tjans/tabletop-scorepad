@@ -23,6 +23,7 @@ class LeagueFacade {
     });
     return teams;
   }
+  
 
   // This function should retrieve all players by position, sorted by sortString.  It needs to return a list of players who do not have a seasonTeamId set on their
   // seasonPlayers record.

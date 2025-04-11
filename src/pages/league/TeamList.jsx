@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
+// icons
+import { PiBaseballCapDuotone } from "react-icons/pi";
 
-// store
-import useAppStore from "src/stores/useAppStore";
+// components
+import Card from "src/components/Card";
 
 // foundation
 import usePageTitle from 'src/hooks/usePageTitle'
@@ -40,42 +42,44 @@ export default function TeamList() {
     return (
         <>
             <ContentWrapper>
-                <table className="text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-300">
+                <h2>{league?.name}</h2>
+                {teams && teams.length > 0 && teams.map((team) => {
 
-                        <tr>
-                            <th className="px-4 py-2 text-start">City</th>
-                            <th className="px-4 py-2">Name</th>
-                            <th className="px-4 py-2">General Manager</th>
-                            <th className="px-4 py-2">Actions</th>
-                        </tr>
-                    </thead>
+                    return (
 
-                    <tbody>
-                        {teams && teams.length > 0 && teams.map((team) => {
+                        <Card key={team.seasonTeamId} to={`/leagues/${leagueId}/teams/${team.seasonTeamId}/edit`} className="" >
+                            <div className="flex items-center gap-3">
+                                <PiBaseballCapDuotone className="mr-5 text-3xl text-defaultBlue" />
+                                <section className="text-left">
+                                    <div className="font-bold">
+                                        {team.parent.city} {team.parent.name}
+                                    </div>
+                                    <div className="text-sm">
+                                        GM: {team.gm?.firstName} {team.gm?.lastName}
+                                    </div>
+                                </section >
+                            </div>
+                        </Card>
 
-                            return (
+                        // <tr key={team.seasonTeamId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        //     <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        //         {team.parent.city}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         {team.parent.name}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         {team.gm?.firstName} {team.gm?.lastName}
+                        //     </td>
+                        //     <td className="px-4 py-2">
+                        //         <button className="px-3 py-1 text-xs font-bold text-white uppercase bg-blue-500 rounded-full hover:bg-blue-700">
+                        //             EDIT
+                        //         </button>
+                        //     </td>
+                        // </tr>
+                    );
+                })}
 
-                                <tr key={team.seasonTeamId} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {team.parent.city}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        {team.parent.name}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        {team.gm?.firstName} {team.gm?.lastName}
-                                    </td>
-                                    <td className="px-4 py-2">
-                                        <button className="px-3 py-1 text-xs font-bold text-white uppercase bg-blue-500 rounded-full hover:bg-blue-700">
-                                            EDIT
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
             </ContentWrapper>
         </>
     );

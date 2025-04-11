@@ -13,6 +13,7 @@ import LeagueEditor from "src/pages/LeagueEditor";
 import LeagueViewer from "src/pages/LeagueViewer";
 import Draft from "src/pages/Draft";
 import TeamList from "src/pages/league/TeamList"
+import TeamEditor from "src/pages/league/TeamEditor";
 import LeagueList from "src/pages/league/LeagueList";
 
 // Plumbing
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
 
         <Route path="/leagues" element={<LeagueList />} />
         <Route path="/leagues/:leagueId/teams" element={<TeamList />} />
+        <Route path="/leagues/:leagueId/teams/:seasonTeamId/edit" element={<TeamEditor />} />
 
         <Route path="/settings" element={<Settings />} />
       </Route>
